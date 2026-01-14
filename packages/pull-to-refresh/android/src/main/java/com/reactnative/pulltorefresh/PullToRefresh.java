@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 
@@ -54,7 +55,7 @@ public class PullToRefresh extends SmartRefreshLayout implements ReactOverflowVi
         post(measureAndLayout);
     }
 
-    @Override
+	@Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         ViewGroup view = (ViewGroup) mRefreshContent.getScrollableView();
         String viewName = view.getClass().getCanonicalName();
@@ -129,6 +130,7 @@ public class PullToRefresh extends SmartRefreshLayout implements ReactOverflowVi
     }
 
     public boolean onInterceptTouchEvent(MotionEvent ev) {
+		requestDisallowInterceptTouchEvent(true);
         if (super.onInterceptTouchEvent(ev)) {
             NativeGestureUtil.notifyNativeGestureStarted(this, ev);
             return true;
@@ -136,7 +138,7 @@ public class PullToRefresh extends SmartRefreshLayout implements ReactOverflowVi
         return false;
     }
 
-    @Override
+	@Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         float height = (float) (getMeasuredHeight() * 0.3);
@@ -155,7 +157,7 @@ public class PullToRefresh extends SmartRefreshLayout implements ReactOverflowVi
     }
 
     @Override
-    protected void dispatchDraw(Canvas canvas) {
+    protected void dispatchDraw(@NonNull Canvas canvas) {
         getDrawingRect(mRect);
         if (!"visible".equals(mOverflow)) {
             canvas.clipRect(mRect);
